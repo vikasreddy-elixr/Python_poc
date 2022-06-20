@@ -3,7 +3,7 @@ import sys
 import click
 
 
-@click.command()
+@click.command(name="search")
 @click.argument('path', default='')
 @click.argument('word', default='')
 def word_search(path, word):
