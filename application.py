@@ -4,8 +4,8 @@ import click
 
 
 @click.command(name="search")
-@click.argument('path', default='')
-@click.argument('word', default='')
+@click.option('--path', default='')
+@click.option('--word', default='')
 def word_search(path, word):
     """takes the file path and the word from the user and search for existence of the word inside the file from the
     path """
@@ -16,8 +16,9 @@ def word_search(path, word):
             with open(os.path.join(os.path.dirname(__file__), path), 'r') as input_file:
                 content = input_file.read()
             x = content.__contains__(word)
+            count = content.count(word)
             if x:
-                sys.exit("searchWord Found")
+                sys.exit("searchWord Found " + str(count) + " times")
             else:
                 click.echo("searchWord Not found")
         except FileNotFoundError:
