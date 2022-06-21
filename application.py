@@ -4,8 +4,8 @@ import click
 
 
 @click.command(name="search")
-@click.option('--path', default='')
-@click.option('--word', default='')
+@click.option('--path', required=True)
+@click.option('--word', required=True)
 def word_search(path, word):
     """takes the file path and the word from the user and search for existence of the word inside the file from the
     path """
@@ -14,17 +14,21 @@ def word_search(path, word):
     if path.endswith(".txt") | path.endswith(".json"):
         try:
             with open(os.path.join(os.path.dirname(__file__), path), 'r') as input_file:
-                content = input_file.read()
-            x = content.__contains__(word)
-            count = content.count(word)
+                lower_case_file = input_file.read()
+                content = lower_case_file.lower()
+                lower_case_word = word.lower()
+            x = content.__contains__(lower_case_word)
+            count = content.count(lower_case_word)
             if x:
-                sys.exit("searchWord Found " + str(count) + " times")
+                if count > 1:
+                    sys.exit("Word Found, Repeated " + str(count) + " times")
+                sys.exit("Word Found, Repeated " + str(count) + " time")
             else:
-                click.echo("searchWord Not found")
+                click.echo("Word Not found")
         except FileNotFoundError:
             click.echo("The file does not exist in the given path")
     else:
-        click.echo("Please Enter the Valid Path")
+        click.echo("Unsupported File Format")
 
 
 def validation(path, word):
@@ -33,9 +37,12 @@ def validation(path, word):
         click.echo("please enter valid path")
         sys.exit(-1)
     if len(word) == 0:
-        print("please enter the searchWord")
+        click.echo("please enter the searchWord")
         sys.exit(-1)
 
 
 if __name__ == '__main__':
-    word_search()
+    if len(sys.argv) == 5:
+        word_search()
+    else:
+        sys.exit("Either path or the word is missing")
