@@ -45,4 +45,4 @@ if __name__ == '__main__':
     if len(sys.argv) == 5:
         word_search()
     else:
-        sys.exit("Either path or the word is missing")
+        sys.exit("Either path or the word is missing.")
